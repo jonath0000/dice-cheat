@@ -1,0 +1,71 @@
+%%%
+%%% Module: dice_cheat
+%%%
+%%% Some cheat routines for dice games (6-sided).
+%%%
+-module(dice_cheat).
+-export([combo_prob/2]).
+
+
+%%
+%% Recursive probablility search, brute force style!
+%%
+%% Returns the probablility to find Combo given a number of 
+%% Strokes left, where the previous stroke gave Val.
+%%
+combo_prob(Strokes, Val, Combo) ->
+
+   if Strokes > 0 ->
+      
+      %io:format("combo_prob times=~w val=~w~n",[Strokes, Val]),
+
+      % Find Val in Combo and remove.
+      Found = lists:any(fun(X) -> X == Val end, Combo),
+      if Found ->
+         %io:format("Found ~w.~n",[Val]),
+	 ComboChild = lists:delete(Val, Combo);
+      true ->
+         ComboChild = Combo
+      end,
+
+      % If all Combo items found, return p=1.
+      if length(ComboChild) == 0 ->
+         1.0;
+      % Else recurse and add partial probablilities...
+      true ->
+        (combo_prob(Strokes-1, 1, ComboChild) +
+      	 combo_prob(Strokes-1, 2, ComboChild) +
+         combo_prob(Strokes-1, 3, ComboChild) +
+         combo_prob(Strokes-1, 4, ComboChild) +
+         combo_prob(Strokes-1, 5, ComboChild) +
+         combo_prob(Strokes-1, 6, ComboChild)) / 6
+      end;
+
+   true ->
+      0.0
+   end.
+
+
+%%
+%% Probablility of a particular dice combo given
+%% the number of dice strokes.
+%%
+%% Strokes - number of dice strokes to eval. 
+%%          (eg. 10 will take ~1 min to calc.)
+%% Combo   - list with dice combination to eval.
+%%
+%% Example: combo_prob(5, [1, 1]) will give 
+%% the probablility to find a pair of 1:s in
+%% 5 strokes.
+%%
+combo_prob(Strokes, Combo) ->
+  (combo_prob(Strokes, 1, Combo) + 
+   combo_prob(Strokes, 2, Combo) + 
+   combo_prob(Strokes, 3, Combo) + 
+   combo_prob(Strokes, 4, Combo) + 
+   combo_prob(Strokes, 5, Combo) + 
+   combo_prob(Strokes, 6, Combo)) / 6.
+
+
+
+
