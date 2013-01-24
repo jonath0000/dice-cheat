@@ -30,12 +30,8 @@
 %%
 %% Assert value is inside range.
 %%
-assert_in(Val, LowBound, HiBound)
-  when LowBound < Val, Val < HiBound  ->
-    true;
-
-assert_in(Val, LowBound, HiBound) ->
-    io:format("Test FAIL: ~w not within ~w to ~w~n",[Val, LowBound, HiBound]).
+assert_in({Val, LowBound, HiBound} = T) ->
+    {_, true} = {T, LowBound < Val andalso Val < HiBound}.
 
 %%
 %% Ref. data generated from
@@ -50,4 +46,4 @@ run1({Strokes, Combo, Lo, Hi}) ->
     run1({Strokes, Combo, 1, Lo, Hi});
 
 run1({Strokes, Combo, N, Lo, Hi}) ->
-   assert_in(dice_cheat:combo_prob(Strokes, Combo) * N, Lo, Hi).
+   assert_in({dice_cheat:combo_prob(Strokes, Combo) * N, Lo, Hi}).
