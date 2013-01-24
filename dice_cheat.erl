@@ -15,9 +15,6 @@
 %%
 combo_prob(Strokes, Val, Combo)
   when Strokes > 0 ->
-      
-      %io:format("combo_prob times=~w val=~w~n",[Strokes, Val]),
-
       case lists:delete(Val, Combo) of
           [] -> %% If all Combo items found, return p=1.
               1.0;
