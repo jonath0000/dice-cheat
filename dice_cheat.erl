@@ -19,13 +19,7 @@ combo_prob(Strokes, Val, Combo)
       %io:format("combo_prob times=~w val=~w~n",[Strokes, Val]),
 
       % Find Val in Combo and remove.
-      Found = lists:any(fun(X) -> X == Val end, Combo),
-      if Found ->
-         %io:format("Found ~w.~n",[Val]),
-	 ComboChild = lists:delete(Val, Combo);
-      true ->
-         ComboChild = Combo
-      end,
+      ComboChild = lists:delete(Val, Combo);
 
       % If all Combo items found, return p=1.
       if length(ComboChild) == 0 ->
