@@ -25,24 +25,26 @@ assert_in(Val, LowBound, HiBound) ->
 run_tests() ->
 
    % Check prob. to get all same in N number of strokes.
-   assert_in(dice_cheat:combo_prob(2,[2,2])*6, 0.166, 0.167),
-   assert_in(dice_cheat:combo_prob(3,[3,3,3])*6, 0.027, 0.028),	
-   assert_in(dice_cheat:combo_prob(4,[4,4,4,4])*6, 0.00462, 0.00464),	
-   assert_in(dice_cheat:combo_prob(5,[6,6,6,6,6])*6, 0.000771, 0.000773),	
+   assert_in(dice_cheat:combo_prob(2,[2,2],6)*6, 0.166, 0.167),
+   assert_in(dice_cheat:combo_prob(3,[3,3,3],6)*6, 0.027, 0.028),	
+   assert_in(dice_cheat:combo_prob(4,[4,4,4,4],6)*6, 0.00462, 0.00464),	
+   assert_in(dice_cheat:combo_prob(5,[6,6,6,6,6],6)*6, 0.000771, 0.000773),	
 
    % Check prob. to get certain number in N strokes.
-   assert_in(dice_cheat:combo_prob(1,[1]), 0.166, 0.167),
-   assert_in(dice_cheat:combo_prob(2,[3]), 11/36-0.0001, 11/36+0.0001),
-   assert_in(dice_cheat:combo_prob(3,[2]), 91/216-0.0001, 91/216+0.0001),
-   assert_in(dice_cheat:combo_prob(4,[1]), 671/1296-0.0001, 671/1296+0.0001),
+   assert_in(dice_cheat:combo_prob(1,[1],6), 0.166, 0.167),
+   assert_in(dice_cheat:combo_prob(2,[3],6), 11/36-0.0001, 11/36+0.0001),
+   assert_in(dice_cheat:combo_prob(3,[2],6), 91/216-0.0001, 91/216+0.0001),
+   assert_in(dice_cheat:combo_prob(4,[1],6), 671/1296-0.0001, 671/1296+0.0001),
 
    % Check prob. to get a particular pair in N strokes.
-   assert_in(dice_cheat:combo_prob(3,[5,5]), 0.074, 0.075),
-   assert_in(dice_cheat:combo_prob(4,[5,5]), (6*25+4*5+1)/1296-0.001, (6*25+4*5+1)/1296+0.001),
+   assert_in(dice_cheat:combo_prob(3,[5,5],6), 0.074, 0.075),
+   assert_in(dice_cheat:combo_prob(4,[5,5],6), 
+      (6*25+4*5+1)/1296-0.001, 
+      (6*25+4*5+1)/1296+0.001),
 
    % Check prob. of straights.
-   assert_in(dice_cheat:combo_prob(5,[1,2,3,4,5]), 120/7776-0.001, 120/7776+0.001),
-   assert_in(dice_cheat:combo_prob(5,[2,3,4,5,6]), 120/7776-0.001, 120/7776+0.001),
+   assert_in(dice_cheat:combo_prob(5,[1,2,3,4,5],6), 120/7776-0.001, 120/7776+0.001),
+   assert_in(dice_cheat:combo_prob(5,[2,3,4,5,6],6), 120/7776-0.001, 120/7776+0.001),
    true.
 
 

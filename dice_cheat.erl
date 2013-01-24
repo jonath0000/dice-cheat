@@ -1,10 +1,10 @@
 %%%
 %%% Module: dice_cheat
 %%%
-%%% Some cheat routines for dice games (6-sided).
+%%% Some cheat routines for dice games.
 %%%
 -module(dice_cheat).
--export([combo_prob/2]).
+-export([combo_prob/3]).
 
 
 %%
@@ -12,17 +12,15 @@
 %%
 %% Returns the probablility to find Combo given a number of 
 %% Strokes left, where the previous stroke gave Val.
+%% Sides determines number of sides on dice.
 %%
-combo_prob(Strokes, Val, Combo) ->
+combo_prob(Strokes, Val, Combo, Sides) ->
 
    if Strokes > 0 ->
       
-      %io:format("combo_prob times=~w val=~w~n",[Strokes, Val]),
-
       % Find Val in Combo and remove.
       Found = lists:any(fun(X) -> X == Val end, Combo),
-      if Found ->
-         %io:format("Found ~w.~n",[Val]),
+      if Found ->         
 	 ComboChild = lists:delete(Val, Combo);
       true ->
          ComboChild = Combo
@@ -33,12 +31,9 @@ combo_prob(Strokes, Val, Combo) ->
          1.0;
       % Else recurse and add partial probablilities...
       true ->
-        (combo_prob(Strokes-1, 1, ComboChild) +
-      	 combo_prob(Strokes-1, 2, ComboChild) +
-         combo_prob(Strokes-1, 3, ComboChild) +
-         combo_prob(Strokes-1, 4, ComboChild) +
-         combo_prob(Strokes-1, 5, ComboChild) +
-         combo_prob(Strokes-1, 6, ComboChild)) / 6
+         lists:sum(lists:map(
+            fun(X) -> combo_prob(Strokes-1, X, ComboChild, Sides)/Sides end, 
+            lists:seq(1,Sides)))
       end;
 
    true ->
@@ -53,18 +48,22 @@ combo_prob(Strokes, Val, Combo) ->
 %% Strokes - number of dice strokes to eval. 
 %%          (eg. 10 will take ~1 min to calc.)
 %% Combo   - list with dice combination to eval.
+%% Sides   - Number of sides on dice.
 %%
 %% Example: combo_prob(5, [1, 1]) will give 
 %% the probablility to find a pair of 1:s in
 %% 5 strokes.
 %%
-combo_prob(Strokes, Combo) ->
-  (combo_prob(Strokes, 1, Combo) + 
-   combo_prob(Strokes, 2, Combo) + 
-   combo_prob(Strokes, 3, Combo) + 
-   combo_prob(Strokes, 4, Combo) + 
-   combo_prob(Strokes, 5, Combo) + 
-   combo_prob(Strokes, 6, Combo)) / 6.
+combo_prob(Strokes, Combo, Sides) ->
+   lists:sum(lists:map(
+      fun(X) -> combo_prob(Strokes, X, Combo, Sides)/Sides end, 
+      lists:seq(1,Sides))).
+   
+
+
+
+
+
 
 
 
