@@ -28,12 +28,6 @@
 
 
 %%
-%% Assert value is inside range.
-%%
-assert_in({Val, LowBound, HiBound} = T) ->
-    {_, true} = {T, LowBound < Val andalso Val < HiBound}.
-
-%%
 %% Ref. data generated from
 %% http://blog.plover.com/math/yahtzee.html
 %% http://wizardofodds.com/ask-the-wizard/probability/dice/
@@ -46,4 +40,6 @@ run1({Strokes, Combo, Lo, Hi}) ->
     run1({Strokes, Combo, 1, Lo, Hi});
 
 run1({Strokes, Combo, N, Lo, Hi}) ->
-   assert_in({dice_cheat:combo_prob(Strokes, Combo) * N, Lo, Hi}).
+    Val = dice_cheat:combo_prob(Strokes, Combo) * N,
+    T = {Lo, Val, Hi},
+    {true, true, _} = {Lo < Val, Val < Hi, T}.  %% assert
