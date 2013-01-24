@@ -22,12 +22,7 @@ combo_prob(Strokes, Val, Combo)
           [] -> %% If all Combo items found, return p=1.
               1.0;
           ComboChild -> %% Else recurse and add partial probablilities...
-              (combo_prob(Strokes-1, 1, ComboChild) +
-               combo_prob(Strokes-1, 2, ComboChild) +
-               combo_prob(Strokes-1, 3, ComboChild) +
-               combo_prob(Strokes-1, 4, ComboChild) +
-               combo_prob(Strokes-1, 5, ComboChild) +
-               combo_prob(Strokes-1, 6, ComboChild)) / 6
+              combo_prob(Strokes-1, ComboChild)
       end;
 
 combo_prob(_Strokes, _Val, _Combo) ->
