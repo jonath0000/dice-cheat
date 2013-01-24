@@ -13,9 +13,8 @@
 %% Returns the probablility to find Combo given a number of 
 %% Strokes left, where the previous stroke gave Val.
 %%
-combo_prob(Strokes, Val, Combo) ->
-
-   if Strokes > 0 ->
+combo_prob(Strokes, Val, Combo)
+  when Strokes > 0 ->
       
       %io:format("combo_prob times=~w val=~w~n",[Strokes, Val]),
 
@@ -41,9 +40,8 @@ combo_prob(Strokes, Val, Combo) ->
          combo_prob(Strokes-1, 6, ComboChild)) / 6
       end;
 
-   true ->
-      0.0
-   end.
+combo_prob(_Strokes, _Val, _Combo) ->
+      0.0.
 
 
 %%
