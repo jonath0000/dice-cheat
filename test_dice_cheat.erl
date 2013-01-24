@@ -29,7 +29,7 @@
 %% Assert value is inside range.
 %%
 assert_in(Val, LowBound, HiBound)
-  when Val > LowBound, Val < HiBound  ->
+  when LowBound < Val, Val < HiBound  ->
     true;
 
 assert_in(Val, LowBound, HiBound) ->
