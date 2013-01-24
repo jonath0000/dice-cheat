@@ -3,9 +3,10 @@
 %%%
 %%% Some cheat routines for dice games (6-sided).
 %%%
--module(dice_cheat).
--export([combo_prob/2]).
 
+-module(dice_cheat).
+
+-export([combo_prob/2]).
 
 %%
 %% Recursive probablility search, brute force style!
@@ -15,16 +16,15 @@
 %%
 combo_prob(Strokes, Val, Combo)
   when Strokes > 0 ->
-      case lists:delete(Val, Combo) of
-          [] -> %% If all Combo items found, return p=1.
-              1.0;
-          ComboChild -> %% Else recurse and add partial probablilities...
-              combo_prob(Strokes-1, ComboChild)
-      end;
+    case lists:delete(Val, Combo) of
+        [] -> %% If all Combo items found, return p=1.
+            1.0;
+        ComboChild -> %% Else recurse and add partial probablilities...
+            combo_prob(Strokes-1, ComboChild)
+    end;
 
 combo_prob(_Strokes, _Val, _Combo) ->
-      0.0.
-
+    0.0.
 
 %%
 %% Probablility of a particular dice combo given

@@ -3,6 +3,7 @@
 %%%
 %%% Test cases for dice_cheat.
 %%%
+
 -module(test_dice_cheat).
 
 -export([run_tests/0,
@@ -26,7 +27,6 @@
          {5, [1,2,3,4,5], 120/7776-0.001, 120/7776+0.001},
          {5, [2,3,4,5,6], 120/7776-0.001, 120/7776+0.001}]).
 
-
 %%
 %% Ref. data generated from
 %% http://blog.plover.com/math/yahtzee.html
@@ -34,7 +34,7 @@
 %% ...and by some manual calculations.
 %%
 run_tests() ->
-   lists:foreach(fun run1/1, ?TESTCASES).
+    lists:foreach(fun run1/1, ?TESTCASES).
 
 run1({Strokes, Combo, Lo, Hi}) ->
     run1({Strokes, Combo, 1, Lo, Hi});
