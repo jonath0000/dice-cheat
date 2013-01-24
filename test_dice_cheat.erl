@@ -4,7 +4,9 @@
 %%% Test cases for dice_cheat.
 %%%
 -module(test_dice_cheat).
--export([run_tests/0]).
+
+-export([run_tests/0,
+         run1/1]).
 
 -define(TESTCASES,
         [% Check prob. to get all same in N number of strokes.
