@@ -42,13 +42,10 @@ combo_prob(_Strokes, _Val, _Combo) ->
 %% 5 strokes.
 %%
 combo_prob(Strokes, Combo) ->
-  (combo_prob(Strokes, 1, Combo) + 
-   combo_prob(Strokes, 2, Combo) + 
-   combo_prob(Strokes, 3, Combo) + 
-   combo_prob(Strokes, 4, Combo) + 
-   combo_prob(Strokes, 5, Combo) + 
-   combo_prob(Strokes, 6, Combo)) / 6.
+    sum(Strokes, 6, Combo, 0.0) / 6.
 
+sum(_Strokes, 0, _Combo, Sum) ->
+    Sum;
 
-
-
+sum(Strokes, N, Combo, Sum) ->
+    sum(Strokes, N-1, Combo, combo_prob(Strokes, N, Combo) + Sum).
