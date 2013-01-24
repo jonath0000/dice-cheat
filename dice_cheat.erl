@@ -18,20 +18,16 @@ combo_prob(Strokes, Val, Combo)
       
       %io:format("combo_prob times=~w val=~w~n",[Strokes, Val]),
 
-      % Find Val in Combo and remove.
-      ComboChild = lists:delete(Val, Combo);
-
-      % If all Combo items found, return p=1.
-      if length(ComboChild) == 0 ->
-         1.0;
-      % Else recurse and add partial probablilities...
-      true ->
-        (combo_prob(Strokes-1, 1, ComboChild) +
-      	 combo_prob(Strokes-1, 2, ComboChild) +
-         combo_prob(Strokes-1, 3, ComboChild) +
-         combo_prob(Strokes-1, 4, ComboChild) +
-         combo_prob(Strokes-1, 5, ComboChild) +
-         combo_prob(Strokes-1, 6, ComboChild)) / 6
+      case lists:delete(Val, Combo) of
+          [] -> %% If all Combo items found, return p=1.
+              1.0;
+          ComboChild -> %% Else recurse and add partial probablilities...
+              (combo_prob(Strokes-1, 1, ComboChild) +
+               combo_prob(Strokes-1, 2, ComboChild) +
+               combo_prob(Strokes-1, 3, ComboChild) +
+               combo_prob(Strokes-1, 4, ComboChild) +
+               combo_prob(Strokes-1, 5, ComboChild) +
+               combo_prob(Strokes-1, 6, ComboChild)) / 6
       end;
 
 combo_prob(_Strokes, _Val, _Combo) ->
