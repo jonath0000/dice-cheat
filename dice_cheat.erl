@@ -46,3 +46,4 @@ sum(_Strokes, 0, _Combo, Sum) ->
 
 sum(Strokes, N, Combo, Sum) ->
     sum(Strokes, N-1, Combo, combo_prob(Strokes, N, Combo) + Sum).
+
