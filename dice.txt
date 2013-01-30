@@ -1,0 +1,47 @@
+
+Let N(k) be the set of integers from 1 through k inclusive.
+
+That one tuple is a permutation of another is an equivalence relation
+on the set of tuples. For each equivalence class there is a unique
+member whose elements are in non-decreasing order. Call such a tuple
+an outcome.
+
+Suppose a fair k-sided die is rolled n times. Represent a result by
+aan element in N(k)^n. Say that result T has outcome X if X can be
+constructed from T by reordering and removing elements. What is the
+probability P(X,n) that a result of n rolls of the dice has outcome X?
+
+Since only a result of length at least |X| can have outcome X:
+
+  P(X,n) = 0 if n < |X|
+
+Now consider |X| =< n. Let c_1,...,c_m be the number of times each
+integer in X occurs in the outcome. If we set c_0 = 0 then the number
+of ways to distribute the members of X in an n-tuple is:
+
+  C(X,n) = \prod_{j=1}^m ((n - \sum_{i=0}^{j-1} c_i) \choose c_j)
+         = \prod_{j=1}^m ((n - \sum_{i=0}^{j-1} c_i)!
+                        / (c_j! * (n - \sum_{i=0}^j c_i)!)
+         = n! / (c_1! * ... * c_m!)
+
+Let D(X,n) be the number of n-tuples having outcome X. If |X| = 0 then
+D(X,n) = k^n for all n. If n = |X| then D(X,n) = C(X,n). If n > |X|,
+by renumbering the faces of the die, wlog X contains 1 through m
+inclusive. For each integer j from 1 through m inclusive, an n-tuple
+whose first element is j has outcome X if and only if its tail
+(n-1)-tuple has outcome X_j, where X_j is formed by removing one
+occurence of j from X. For each j from m+1 through k inclusive, an
+n-tuple whose first element is j has outcome X if and only if its tail
+(n-1)-tuple has outcome X. Thus, the number of n-tuples having outcome
+X is given by:
+
+  D(X,n) = \sum_{j=1}^m D(X_j,n-1) + (k - m) * D(X,n-1)
+
+and:
+
+  P(X,n) = D(X,n) / k^n
+         = 1/k * D(X,n)/k^{n-1}
+         = 1/k * [\sum_{j=1}^m P(X_j,n-1) + (k - m) * P(X,n-1)]
+
+This allows D(X,n) and P(X,n) to be computed recursively.
+
