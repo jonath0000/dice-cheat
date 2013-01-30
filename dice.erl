@@ -22,7 +22,9 @@ p(Values, N, K)
 
 p(Outcome, N, K)
   when is_integer(N), is_integer(K), 0 < K ->
-    prob(Outcome, N, K).
+    {Res, _} = p(Outcome, N, K, dict:new()),
+    Res.
+%% The dict is a cache of previously computed probabilities.
 
 %% p/2
 
@@ -31,32 +33,52 @@ p(Values, N) ->
 
 %% ===========================================================================
 
-%% prob/3
+%% p/4
 
 %% Fewer rolls than the length of the outcome.
-prob({Len,_}, N, _)
+p({Len,_}, N, _, Cache)
   when N < Len ->
-    0.0;
+    {0.0, Cache};
 
 %% Any result (including length 0) has an outcome of length 0.
-prob({0,_}, _, _) ->
-    1.0;
+p({0,_}, _, _, Cache) ->
+    {1.0, Cache};
 
-%% Number of rolls = length of outcome.
-prob({N,X}, N, K) ->
-    try count(X, N, K) of
-        Count -> quot(Count, K, N)
-    catch
-        ?MODULE -> 0.0
-    end;
+p({_,X} = T, N, K, Cache0) ->
+    case dict:find({X,N}, Cache0) of
+        {ok, Prob} ->
+            {Prob, Cache0};
+        error ->
+            {Prob, Cache} = compute(T, N, K, Cache0),
+            {Prob, dict:store({X,N}, Prob, Cache)}
+    end.
 
-prob({_,X} = T, N, K) ->
+%% P(X,n) = C(X,n) / k^n
+compute({N,X}, N, K, Cache) ->
+    {try count(X, N, K) of
+         Count ->
+             quot(Count, K, N)
+     catch
+         ?MODULE -> 0.0
+     end,
+     Cache};
+
+%% P(X,n) = 1/k * [\sum_{j=1}^m P(X_j,n-1) + (k - m) * P(X,n-1)]
+compute({_,X} = T, N, K, Cache0) ->
     M = length(X),
     N1 = N - 1,
-    lists:foldl(fun({J,_}, A) -> A + prob(delete(J,T), N1, K) end,
-                (K - M) * prob(T, N-1, K),
-                X)
-        / K.
+    {P0, Cache1} = p(T, N1, K, Cache0),
+    {Sum, Cache} = lists:foldl(fun({J,_}, {S,C0}) ->
+                                       {P,C} = p(delete(J,T), N1, K, C0),
+                                       {S+P, C}
+                               end,
+                               {(K - M) * P0, Cache1},
+                               X),
+    {Sum/K, Cache}.
+
+%% count/3
+%%
+%% Compute C(X,n) = n! / (c_1 * ... * c_m)
 
 count(X, N, K) ->
     lists:foldl(fun({J,C},A) when 1 =< J, J =< K -> A div fact(C);
