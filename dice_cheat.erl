@@ -40,9 +40,18 @@ combo_prob(_Strokes, _Val, _Combo) ->
 %%
 combo_prob(Strokes, Combo) ->
     sum(Strokes, 6, Combo, 0.0) / 6.
+<<<<<<< HEAD
 
 sum(_Strokes, 0, _Combo, Sum) ->
     Sum;
+=======
+
+sum(_Strokes, 0, _Combo, Sum) ->
+    Sum;
+
+sum(Strokes, N, Combo, Sum) ->
+    sum(Strokes, N-1, Combo, combo_prob(Strokes, N, Combo) + Sum).
+>>>>>>> 1bf03039c255f653dc6335728a96b020f80f5cbb
 
 sum(Strokes, N, Combo, Sum) ->
     sum(Strokes, N-1, Combo, combo_prob(Strokes, N, Combo) + Sum).
